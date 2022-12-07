@@ -31,6 +31,7 @@
     </div>
 
     <div class="feed">
+       <!-- afficher les posts -->
       <div v-for="(feed, i) in feeds" :key="i" class="feed-list">
         <div class="card">
           <div class="card-header">
@@ -53,6 +54,7 @@
                 />
               </div>
             </div>
+             <!-- au clique / modifier -->
             <p v-if="!feed.canUpdate">{{ feed.content }}</p>
             <input type="text" v-model="feed.content" class="postUser" v-else />
           </div>
@@ -62,19 +64,25 @@
               {{ feed.likes }} likes
             </span>
 
-            <div class="update">
+            <div v-if="user.userId === feed.UserId" class="update">
               <button
                 type="button"
                 v-on:click="feed.canUpdate = !feed.canUpdate"
                 v-if="!feed.canUpdate"
+                
+                
               >
                 modifier
               </button>
-              <button type="button" v-on:click="onUpdatePost(feed)" v-else>
+              <button type="button" 
+              v-on:click="onUpdatePost(feed)" 
+              
+              
+              >
                 valider
               </button>
             </div>
-            <div class="delete">
+            <div v-if="user.userId === feed.UserId" class="delete">
               <button type="button" v-on:click="onDeletePost(feed.id)">
                 supprimer
               </button>
@@ -173,9 +181,9 @@ export default {
 
   methods: {
     async sendFeed() {
-      //Récupération de l'image
+     
       if (this.user.token) {
-        //if (this.user.token) {
+        //Récupération de l'image
         const formData = new FormData();
         formData.append(
           "image",

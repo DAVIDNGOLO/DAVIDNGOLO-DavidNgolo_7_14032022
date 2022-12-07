@@ -112,7 +112,7 @@ exports.createLike = (req, res) => {
       // la personne n'aime pas la sauce
       const userId = req.body.userId;
       const userLiked = posts.usersLiked.indexOf((el) => el === userId);
-      if (userLiked != -1) {
+      if (userLiked === -1) {
         posts.dislikes++; // ajout d'un dislike
         posts.likes--; // annulation du like
         posts.usersLiked.splice(posts.usersLiked.indexOf(userId), 1); //Suppression du like en fonction de son id
@@ -120,7 +120,7 @@ exports.createLike = (req, res) => {
         posts.save();
       }
       // la personne aime la sauce
-      if (userLiked === -1) {
+      if (userLiked === 1) {
         posts.likes++; // ajout d'un like
         posts.dislikes--; // annulation du dislike
         posts.usersDisliked.splice(posts.usersDisliked.indexOf(userId), 1); // Suppression du dislike en fonction de son id

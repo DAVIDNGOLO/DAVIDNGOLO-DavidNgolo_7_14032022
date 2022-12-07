@@ -148,17 +148,23 @@ const store = createStore({
         })
         .catch(function () {});
     },
-    async createLike({ commit, dispatch }, params) {
-      await instance
+    createLike: ({ commit, dispatch }, params) => {
+      return new Promise((resolve, reject) => {
+       instance
         .post(`/posts/${params.postId}/like`, {
           userId: params.userId,
+          likes: -1
         })
         .then((response) => {
           commit("setStatus", response.data);
           dispatch("getFeeds");
+          resolve(response);
         })
-        .catch(() => {});
+        .catch((error) => {reject(error);});
+        
+      })
     },
+  
   },
 });
 
