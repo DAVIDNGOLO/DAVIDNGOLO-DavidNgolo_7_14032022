@@ -11,6 +11,11 @@ const emailMask2Options = {
   maskAtTheRate: false,
 };
 
+const UserRole  = {
+  NORMAL_USER: "NORMAL_USER",
+  SUPER_USER: "SUPER_USER"
+}
+
 exports.signup = (req, res, next) => {
   //const maskedEmail = MaskData.maskEmail2(req.body.email, emailMask2Options);
   console.log(req.body);
@@ -21,6 +26,7 @@ exports.signup = (req, res, next) => {
         pseudo: req.body.pseudo,
         email: req.body.email,
         password: hash,
+        roles: UserRole.NORMAL_USER
       });
 
       user

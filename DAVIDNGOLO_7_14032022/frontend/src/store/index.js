@@ -41,6 +41,7 @@ const store = createStore({
       state.status = status;
     },
     logUser: function (state, user) {
+      console.log({user})
       axios.defaults.headers.common["Authorization"] = user.token;
       localStorage.setItem("user", JSON.stringify(user));
       state.user = user;

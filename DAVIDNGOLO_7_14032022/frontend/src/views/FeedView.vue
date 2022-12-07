@@ -64,7 +64,7 @@
               {{ feed.likes }} likes
             </span>
 
-            <div v-if="user.userId === feed.UserId" class="update">
+            <div v-if="checkUserRole(feed.UserId)" class="update">
               <button
                 type="button"
                 v-on:click="feed.canUpdate = !feed.canUpdate"
@@ -81,9 +81,7 @@
               >
                 valider
               </button>
-            </div>
-            <div v-if="user.userId === feed.UserId" class="delete">
-              <button type="button" v-on:click="onDeletePost(feed.id)">
+                            <button type="button" v-on:click="onDeletePost(feed.id)" class="delete">
                 supprimer
               </button>
             </div>
@@ -209,6 +207,14 @@ export default {
         year: "numeric",
       });
     },
+
+    checkUserRole (UserId) {
+      if(this.user.userId === UserId || this.userInfos.roles === 'SUPER_USER') {
+        return true;
+      }
+      return false;
+    },
+
     onChangeImage(e, post) {
       console.log(post);
       const file = e.target.files[0];

@@ -21,6 +21,9 @@ const User = sequelize.define(
     postsLiked: {
       type: Sequelize.JSON,
     },
+    roles: {
+      type: DataTypes.ENUM("NORMAL_USER", "SUPER_USER"),
+    }
   },
   {
     // Other model options go here
