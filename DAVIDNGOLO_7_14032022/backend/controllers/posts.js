@@ -1,11 +1,13 @@
 const Posts = require("../models/post");
+//FileSaver.js est la solution pour enregistrer des fichiers côté client
 const fs = require("fs");
+//middleware principalement utilisé pour télécharger des fichiers
 const multer = require("multer");
 const User = require("../models/user");
 
 exports.createPosts = (req, res, next) => {
   const postsObject = req.body;
-  //delete postsObject._id;
+  
   const posts = new Posts({
     ...postsObject,
     UserId: postsObject.userId,
@@ -30,6 +32,7 @@ exports.modifyPosts = (req, res, next) => {
       }).then((posts) => {
         // On supprime l'ancienne image du serveur
         const filename = posts.imagesUrl.split("/images/")[1];
+        // fs.unlinksync utilisée pour supprimer de manière synchrone un fichier
         fs.unlinkSync(`images/${filename}`);
       }),
       (postsObject = {
@@ -91,7 +94,7 @@ exports.getOnePosts = (req, res, next) => {
     .catch((error) => res.status(404).json({ error }));
 };
 exports.getAllPosts = (req, res, next) => {
-  //appel de toutes les sauces avec request, result et next pour passer au prochain controller
+  //appel de tous les posts avec request, result et next pour passer au prochain controller
   Posts.findAll({
     include: {
       model: User,
@@ -102,32 +105,39 @@ exports.getAllPosts = (req, res, next) => {
 };
 
 exports.createLike = (req, res) => {
-  //Récupération d'une seule Sauce avec 'findOne'
+  
   const postId = req.params.id;
   Posts.findOne({
     where: { id: postId },
   })
 
     .then((posts) => {
-      // la personne aime  la sauce
+      
       const userId = req.body.userId;
-      const userLiked = posts.usersLiked.indexOf((el) => el === userId);
-      if (userLiked === 1) {
+      const userLiked = posts.usersLiked.findIndex((el) => el === userId);
+      console.log(userLiked)
+      if (userLiked >= 0) {
         posts.dislikes++; // ajout d'un dislike
         posts.likes--; // annulation du like
         posts.usersLiked.splice(posts.usersLiked.indexOf(userId), 1); //Suppression du like en fonction de son id
         posts.usersDisliked.push(userId); // ajout du username + dislike dans le tableau
+        posts.changed('usersDisliked', true);
+        posts.changed('usersLikes', true);
         posts.save();
+
       }
-      // la personne n'aime pas la sauce
+      
       if (userLiked === -1) {
         posts.likes++; // ajout d'un like
         posts.dislikes--; // annulation du dislike
         posts.usersDisliked.splice(posts.usersDisliked.indexOf(userId), 1); // Suppression du dislike en fonction de son id
         posts.usersLiked.push(userId); // ajout du username + like dans le tableau
+        console.log(posts.usersLiked);
+        posts.changed('usersDisliked', true);
+        posts.changed('usersLikes', true);
         posts.save();
-      }
 
+      }
       //réponse de réussite code 200
       res.status(200).json({ message: "like pris en compte" });
     })

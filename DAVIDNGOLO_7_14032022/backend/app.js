@@ -1,8 +1,11 @@
-//importation de express
+
+//charge les variables d'environnement d'un .envfichier dans process.env
 require("dotenv").config();
 const bcrypt = require("bcrypt");
-
+//Le CORS permet de prendre en charge des requêtes multi-origines 
+//sécurisées et des transferts de données entre des navigateurs et des serveurs
 const cors = require("cors");
+//importation de express
 const express = require("express");
 const path = require("path");
 const postsRoutes = require("./routes/posts");
@@ -14,12 +17,13 @@ const User = require('./models/user')
 //pour creer une application express
 const app = express();
 app.use(express.json());
+//creation de l'admin qui aura le role de super User
 async function createAdminUser () {
-  const adminFound = await User.findOne({ where: { pseudo: "admin" } })
+  const hash = await bcrypt.hash('admin',10);
+  const adminFound = await User.findOne({ where: {
+    pseudo: "admin"
+  } })
   if(!adminFound){
-      bcrypt
-      .hash("admin", 10)
-      .then((hash) => {
       const user = new User({
         pseudo: "admin",
         email :"admin@groupomania.com",
@@ -27,7 +31,6 @@ async function createAdminUser () {
         roles: "SUPER_USER"
       })
       user.save();
-    })
   }
 }
 app.use((req, res, next) => {
@@ -52,12 +55,13 @@ app.use("/api/posts", postsRoutes);
 app.use("/api/auth", userRoutes);
 app.use("/api/comments", commentsRoutes);
 
-createAdminUser();
 
 //creation de tables dans notre database en fonction des models que nous avons
 app.listen({ port: process.env.PORT }, async () => {
   console.log(`Server up on http://localhost:${process.env.PORT}`);
   console.log("Database synced");
+  createAdminUser();
+
 });
 
 //exportation de app js pour pouvoir l'utiliser depuis un autre fichier

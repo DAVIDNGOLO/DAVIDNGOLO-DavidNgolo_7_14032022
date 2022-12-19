@@ -1,7 +1,7 @@
 
 const express = require("express");
 
-//Définition des chemins posts, athorisation et multer qui serviront pour le router
+//Définition des chemins posts, authorisation et multer qui serviront pour le router
 
 const auth = require("../middleware/auth");
 const multer = require("../middleware/multer-config");

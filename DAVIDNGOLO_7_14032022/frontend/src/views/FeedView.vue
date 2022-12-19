@@ -175,6 +175,7 @@ export default {
       console.log(this.feeds);
       return;
     }
+    
   },
 
   methods: {
@@ -222,8 +223,18 @@ export default {
       formData.append("image", file, file.name);
       this.postToUpdate.image = formData.get("image");
     },
+    
     onLikePost(postId) {
-      this.$store.dispatch("createLike", { postId, userId: this.user.id });
+      let count = 0;
+      if(count < 1){
+        this.$store.dispatch("createLike", { postId, userId: this.userInfos.id });
+        count++;
+      }else{
+        this.$store.dispatch("createLike", { postId, userId: this.userInfos.id });
+        count--;
+      }
+      
+      
     },
     onUpdatePost(post) {
       this.$store.dispatch("modifyPost", {

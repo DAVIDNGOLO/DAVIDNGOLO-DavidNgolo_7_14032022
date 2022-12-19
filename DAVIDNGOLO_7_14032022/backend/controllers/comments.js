@@ -1,6 +1,6 @@
 
 const Comments = require("../models/comments");
-
+//FileSaver.js est la solution pour enregistrer des fichiers côté client
 const fs = require("fs");
 
 exports.createComments = (req, res, next) => {

@@ -21,29 +21,23 @@ const Post = sequelize.define(
       type: DataTypes.STRING,
     },
     usersLiked: {
-      type: Sequelize.JSON,
-      defaultValue: [],
+      type: DataTypes.STRING,
+      defaultValue: "[]",
       get() {
-        return this.getDataValue("usersLiked");
+        return JSON.parse(this.getDataValue("usersLiked"));
       },
       set(val) {
-        if (!Array.isArray(val)) {
-          throw new Error("usersLiked must to be an array");
-        }
-        this.setDataValue("usersLiked", val);
+        return this.setDataValue("usersLiked", JSON.stringify(val));
       },
     },
     usersDisliked: {
-      type: Sequelize.JSON,
-      defaultValue: [],
+      type: DataTypes.STRING,
+      defaultValue: "[]",
       get() {
-        return this.getDataValue("usersDisliked");
+        return JSON.parse(this.getDataValue("usersDisliked"));
       },
       set(val) {
-        if (!Array.isArray(val)) {
-          throw new Error("usersDisliked must to be an array");
-        }
-        this.setDataValue("usersDisliked", val);
+        return this.setDataValue("usersDisliked", JSON.stringify(val));
       },
     },
   },

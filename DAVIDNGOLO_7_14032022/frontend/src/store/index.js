@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
-
 const axios = require("axios").default;
+
 const instance = axios.create({
   baseURL: "http://localhost:5500/api",
 });
@@ -150,11 +150,11 @@ const store = createStore({
         .catch(function () {});
     },
     createLike: ({ commit, dispatch }, params) => {
+      console.log(params)
       return new Promise((resolve, reject) => {
        instance
         .post(`/posts/${params.postId}/like`, {
           userId: params.userId,
-          likes: -1
         })
         .then((response) => {
           commit("setStatus", response.data);

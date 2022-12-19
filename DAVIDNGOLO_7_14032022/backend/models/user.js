@@ -34,5 +34,5 @@ const User = sequelize.define(
 );
 
 // `sequelize.define` also returns the model
-
+User.sync();
 module.exports = User;
