@@ -6,10 +6,10 @@ const instance = axios.create({
 });
 let user = localStorage.getItem("user");
 if (!user) {
-  user = {
+  /*user = {
     userId: -1,
     token: "",
-  };
+  };*/
 } else {
   try {
     user = JSON.parse(user);
@@ -110,7 +110,7 @@ const store = createStore({
         .catch(function () {});
     },
     sendFeed: ({ commit, dispatch }, post) => {
-      console.log(post);
+      axios.defaults.headers.common["Authorization"] =  localStorage.getItem("user").token;
       instance
         .post("/posts", post, {
           headers: {
@@ -142,6 +142,8 @@ const store = createStore({
       });
     },
     getFeeds: ({ commit }) => {
+      axios.defaults.headers.common["Authorization"] =  localStorage.getItem("user").token;
+     
       instance
         .get("/posts")
         .then(function (response) {

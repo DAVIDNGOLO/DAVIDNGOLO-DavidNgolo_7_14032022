@@ -18,7 +18,7 @@ const User = require('./models/user')
 const app = express();
 app.use(express.json());
 //creation de l'admin qui aura le role de super User
-async function createAdminUser () {
+/*async function createAdminUser () {
   const hash = await bcrypt.hash('admin',10);
   const adminFound = await User.findOne({ where: {
     pseudo: "admin"
@@ -32,7 +32,7 @@ async function createAdminUser () {
       })
       user.save();
   }
-}
+}*/
 app.use((req, res, next) => {
   //qui peut acceder à l'API
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -57,12 +57,12 @@ app.use("/api/comments", commentsRoutes);
 
 
 //creation de tables dans notre database en fonction des models que nous avons
-app.listen({ port: process.env.PORT }, async () => {
+/*app.listen({ port: process.env.PORT }, async () => {
   console.log(`Server up on http://localhost:${process.env.PORT}`);
   console.log("Database synced");
   createAdminUser();
 
-});
+});*/
 
 //exportation de app js pour pouvoir l'utiliser depuis un autre fichier
 module.exports = app;

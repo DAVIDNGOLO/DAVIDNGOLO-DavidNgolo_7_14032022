@@ -59,7 +59,7 @@
             <input type="text" v-model="feed.content" class="postUser" v-else />
           </div>
           <div class="card-footer">
-            <span class="likes" v-on:click="onLikePost(feed.id)">
+            <span class="likes" v-on:click.once="onLikePost(feed.id)">
               <!-- image like -->
               {{ feed.likes }} likes
             </span>
@@ -177,8 +177,9 @@ export default {
     }
     
   },
-
+ 
   methods: {
+    
     async sendFeed() {
      
       if (this.user.token) {
@@ -225,14 +226,15 @@ export default {
     },
     
     onLikePost(postId) {
-      let count = 0;
-      if(count < 1){
+      
+      //if(count === 0){
         this.$store.dispatch("createLike", { postId, userId: this.userInfos.id });
-        count++;
-      }else{
+        //count++;
+      //}
+      /*else{
         this.$store.dispatch("createLike", { postId, userId: this.userInfos.id });
         count--;
-      }
+      }*/
       
       
     },
@@ -262,6 +264,7 @@ export default {
         image: "",
       },
     };
+    
   },
   computed: {
     ...mapState({
